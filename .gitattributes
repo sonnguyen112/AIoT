@@ -1,0 +1,9 @@
+midterm/dataset/**/*.png filter=lfs diff=lfs merge=lfs -text
+midterm/dataset/**/*.bmp filter=lfs diff=lfs merge=lfs -text
+midterm/checkpoints/*.pth filter=lfs diff=lfs merge=lfs -text
+midterm/checkpoints/*.pt filter=lfs diff=lfs merge=lfs -text
+midterm/checkpoints/*.ckpt filter=lfs diff=lfs merge=lfs -text
+midterm/dataset/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+midterm/dataset/**/*.webp filter=lfs diff=lfs merge=lfs -text
+midterm/checkpoints/*.onnx filter=lfs diff=lfs merge=lfs -text
+midterm/dataset/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
