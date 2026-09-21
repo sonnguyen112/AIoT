@@ -192,6 +192,7 @@ Có 10 ảnh test nên mỗi model sẽ thực hiện `10.000` lượt inference
 
 Kết quả được lưu trong `midterm/benchmark_results/`:
 
+- `benchmark_report.md`: báo cáo Markdown trình bày và phân tích kết quả benchmark;
 - `benchmark_report.json`: báo cáo đầy đủ, thông tin môi trường, latency percentiles, CPU/RAM/Flash, accuracy và phân tích graph;
 - `benchmark_summary.csv`: một dòng cho mỗi model, thuận tiện mở bằng Excel;
 - `benchmark_per_image.csv`: dự đoán và accuracy của từng ảnh.

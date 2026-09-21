@@ -1,0 +1,41 @@
+model_key,runtime,image,true_label,true_index,predicted_label,predicted_index,correct,confidence
+pth_cpu,PyTorch CPU,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_001.jpg,dodo,0,dodo,0,True,0.9482568502426147
+pth_cpu,PyTorch CPU,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_002.jpg,dodo,0,dodo,0,True,0.9509942531585693
+pth_cpu,PyTorch CPU,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_003.jpg,dodo,0,dodo,0,True,0.9106885194778442
+pth_cpu,PyTorch CPU,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_004.jpg,dodo,0,dodo,0,True,0.9378775954246521
+pth_cpu,PyTorch CPU,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_005.jpg,dodo,0,dodo,0,True,0.8815115690231323
+pth_cpu,PyTorch CPU,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_001.jpg,no_dodo,1,no_dodo,1,True,0.7293097376823425
+pth_cpu,PyTorch CPU,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_002.jpg,no_dodo,1,no_dodo,1,True,0.7510856986045837
+pth_cpu,PyTorch CPU,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_003.jpg,no_dodo,1,no_dodo,1,True,0.7082269191741943
+pth_cpu,PyTorch CPU,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_004.jpg,no_dodo,1,no_dodo,1,True,0.7381595969200134
+pth_cpu,PyTorch CPU,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_005.jpg,no_dodo,1,no_dodo,1,True,0.6532666683197021
+onnx_basic,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_001.jpg,dodo,0,dodo,0,True,0.9482570290565491
+onnx_basic,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_002.jpg,dodo,0,dodo,0,True,0.9509941339492798
+onnx_basic,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_003.jpg,dodo,0,dodo,0,True,0.9106885194778442
+onnx_basic,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_004.jpg,dodo,0,dodo,0,True,0.9378775954246521
+onnx_basic,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_005.jpg,dodo,0,dodo,0,True,0.8815115094184875
+onnx_basic,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_001.jpg,no_dodo,1,no_dodo,1,True,0.7293097972869873
+onnx_basic,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_002.jpg,no_dodo,1,no_dodo,1,True,0.7510857582092285
+onnx_basic,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_003.jpg,no_dodo,1,no_dodo,1,True,0.7082269191741943
+onnx_basic,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_004.jpg,no_dodo,1,no_dodo,1,True,0.738159716129303
+onnx_basic,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_005.jpg,no_dodo,1,no_dodo,1,True,0.6532670855522156
+onnx_extend,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_001.jpg,dodo,0,dodo,0,True,0.9482570290565491
+onnx_extend,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_002.jpg,dodo,0,dodo,0,True,0.9509941339492798
+onnx_extend,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_003.jpg,dodo,0,dodo,0,True,0.9106885194778442
+onnx_extend,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_004.jpg,dodo,0,dodo,0,True,0.9378775954246521
+onnx_extend,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_005.jpg,dodo,0,dodo,0,True,0.8815115094184875
+onnx_extend,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_001.jpg,no_dodo,1,no_dodo,1,True,0.7293097972869873
+onnx_extend,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_002.jpg,no_dodo,1,no_dodo,1,True,0.7510857582092285
+onnx_extend,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_003.jpg,no_dodo,1,no_dodo,1,True,0.7082269191741943
+onnx_extend,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_004.jpg,no_dodo,1,no_dodo,1,True,0.738159716129303
+onnx_extend,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_005.jpg,no_dodo,1,no_dodo,1,True,0.6532670855522156
+onnx_all,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_001.jpg,dodo,0,dodo,0,True,0.9482569098472595
+onnx_all,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_002.jpg,dodo,0,dodo,0,True,0.9509940147399902
+onnx_all,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_003.jpg,dodo,0,dodo,0,True,0.9106885194778442
+onnx_all,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_004.jpg,dodo,0,dodo,0,True,0.9378775954246521
+onnx_all,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/dodo/dodo_005.jpg,dodo,0,dodo,0,True,0.8815116882324219
+onnx_all,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_001.jpg,no_dodo,1,no_dodo,1,True,0.7293097376823425
+onnx_all,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_002.jpg,no_dodo,1,no_dodo,1,True,0.7510857582092285
+onnx_all,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_003.jpg,no_dodo,1,no_dodo,1,True,0.7082270979881287
+onnx_all,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_004.jpg,no_dodo,1,no_dodo,1,True,0.738159716129303
+onnx_all,ONNX Runtime CPUExecutionProvider,/home/sonnguyen112/data/Master/AIoT/project/midterm/dataset/test/no_dodo/no_dodo_005.jpg,no_dodo,1,no_dodo,1,True,0.653266966342926

@@ -1,0 +1,15 @@
+Dataset: 10 images | repetitions: 1000 | timed inferences/model: 10000 | input: 602112 bytes/image
+Benchmarking pth_cpu: /home/sonnguyen112/data/Master/AIoT/project/midterm/checkpoints/best_resnet50.pth
+  mean=187.7527 ms | accuracy=100.00% | throughput=5.33 images/s
+Benchmarking onnx_basic: /home/sonnguyen112/data/Master/AIoT/project/midterm/checkpoints/dodo_classifier_basic.onnx
+[0;93m2026-09-20 21:28:58.764514002 [W:onnxruntime:Default, telemetry.cc:800 operator()] Failed to persist telemetry device ID; using an in-memory identifier[m
+  mean=148.4533 ms | accuracy=100.00% | throughput=6.74 images/s
+Benchmarking onnx_extend: /home/sonnguyen112/data/Master/AIoT/project/midterm/checkpoints/dodo_classifier_extend.onnx
+[0;93m2026-09-20 21:54:15.438261480 [W:onnxruntime:Default, telemetry.cc:800 operator()] Failed to persist telemetry device ID; using an in-memory identifier[m
+  mean=146.7518 ms | accuracy=100.00% | throughput=6.81 images/s
+Benchmarking onnx_all: /home/sonnguyen112/data/Master/AIoT/project/midterm/checkpoints/dodo_classifier.onnx
+[0;93m2026-09-20 22:19:13.544452263 [W:onnxruntime:Default, telemetry.cc:800 operator()] Failed to persist telemetry device ID; using an in-memory identifier[m
+  mean=116.5027 ms | accuracy=100.00% | throughput=8.58 images/s
+JSON report: midterm/benchmark_results/benchmark_report.json
+Summary CSV: midterm/benchmark_results/benchmark_summary.csv
+Per-image CSV: midterm/benchmark_results/benchmark_per_image.csv
