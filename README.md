@@ -240,3 +240,14 @@ python midterm/convert_to_onnx.py --help
 python midterm/demo.py --help
 python midterm/benchmark.py --help
 ```
+## AI Disclosure:
+
+Trong quá trình thực hiện dự án, nhóm có sử dụng các công cụ AI để hỗ trợ một số công việc sau:
+
+- **Codex:** Hỗ trợ lập trình và gỡ lỗi (debugging), tra cứu cú pháp thư viện, gợi ý cấu trúc lệnh và giải thích thông báo lỗi.
+- **Gemini và Perplexity:** Hỗ trợ tra cứu, tổng hợp tài liệu; tóm tắt các khái niệm kỹ thuật phức tạp; giải thích công thức toán học và tìm kiếm tài liệu tham khảo.
+- **Claude:** Hỗ trợ biên tập slide, báo cáo và xây dựng template; cải thiện cách diễn đạt, sửa lỗi chính tả/ngữ pháp và trình bày nội dung mạch lạc.
+
+### Trách nhiệm và đóng góp của nhóm
+
+Các thành viên trực tiếp kiểm tra và xác thực mã nguồn, thực hiện các phép đo trên dữ liệu thực tế, đồng thời chịu trách nhiệm hoàn toàn về tính chính xác của nội dung báo cáo. Các công cụ AI chỉ đóng vai trò hỗ trợ; kết quả đầu ra được nhóm rà soát trước khi sử dụng.
