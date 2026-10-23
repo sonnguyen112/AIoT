@@ -463,22 +463,7 @@ MQTT Explorer hiển thị bản tin và metadata, không hiển thị ảnh ho�
 
 Mã nguồn được tổ chức theo trách nhiệm: training/data.py, training/train.py, training/evaluate.py và training/export_onnx.py xử lý dữ liệu/mô hình; edgeface/preprocess.py, edgeface/protocol.py và edgeface/mqtt.py cung cấp thành phần dùng chung; các module trong raspberry_pi đảm nhiệm thiết bị biên; telegram_bot/bot.py điều phối lệnh và phản hồi. Dữ liệu khuôn mặt gốc cùng checkpoint huấn luyện được giữ ngoài Git.
 
-### 10.3 Gợi ý mở rộng thành báo cáo 20–35 trang
-
-| Chương báo cáo cuối kỳ | Nội dung có thể phát triển | Trang tham khảo |
-|---|---|---:|
-| Mở đầu, động lực, bài toán | Ngữ cảnh, mục tiêu, phạm vi, yêu cầu môn học | 2–3 |
-| Cơ sở lý thuyết, nghiên cứu liên quan | Face detection/recognition, transfer learning, MobileNetV3, Unknown/open-set, MQTT, ONNX | 4–6 |
-| Kiến trúc và data pipeline | Sơ đồ, thành phần, topic, QoS, ACL và luồng thu thập | 4–6 |
-| Dataset và phương pháp huấn luyện | Nguồn, lọc, chia tập, rò rỉ dữ liệu, tăng cường dữ liệu và chiến lược huấn luyện | 3–5 |
-| Edge deployment và ứng dụng | Pi, camera, ONNX Runtime, Tailscale, Telegram, MQTT Explorer | 3–4 |
-| Thực nghiệm và benchmark | Chất lượng test, latency/FPS, RAM/Flash, biểu đồ và phương pháp | 4–6 |
-| Thảo luận, giới hạn, đạo đức | Phiên kiểm tra độc lập, Unknown, đồng thuận, phát hiện sống và dữ liệu cá nhân | 2–3 |
-| Kết luận và hướng phát triển | Kết quả đạt được và kế hoạch cải thiện có thể kiểm thử | 1–2 |
-
-Gợi ý slide 10–14 trang: vấn đề và mục tiêu; kiến trúc; luồng dữ liệu; YuNet + MobileNetV3; training và split; ONNX/edge deployment; MQTT topics/QoS; demo Telegram/UI; confusion matrix; benchmark latency/memory; giới hạn và kết luận.
-
-### 10.4 Kết quả có thể khẳng định và giới hạn cần giữ
+### 10.3 Kết quả có thể khẳng định và giới hạn cần giữ
 
 Dự án đã triển khai chuỗi xử lý từ video thành viên đến mô hình chạy cục bộ trên Raspberry Pi ARM64. Ngoài video, có 150 vùng mặt của Sơn được thu bằng camera Pi; vì vậy cần mô tả đây là dữ liệu kết hợp, không coi toàn bộ dữ liệu là ảnh thu từ Pi. Việc tinh chỉnh đã cập nhật classifier và các khối cuối của backbone bằng GPU laptop.
 
