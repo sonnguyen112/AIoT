@@ -215,3 +215,15 @@ Dataset, checkpoint và config private được gitignore; bundle ONNX đang dep
 Model đang chia sẻ phân loại 5 thành viên và Unknown. Train/test vẫn chung nguồn quay nên chưa chứng minh khả năng tổng quát ở phiên mới. Cần bổ sung các phiên độc lập cho cả team, train lại và đánh giá trên Pi. Chưa có liveness detection hoặc đánh giá live-camera đầy đủ có ground truth.
 
 Nguồn: [YuNet/OpenCV](https://docs.opencv.org/4.12.0/d0/dd4/tutorial_dnn_face.html), [MobileNetV3-Small](https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.mobilenet_v3_small.html), [ONNX Runtime Python ARM64](https://onnxruntime.ai/docs/get-started/with-python.html), [LFW research paper](https://people.cs.umass.edu/~elm/papers/lfw.pdf), [LFW loader/checksum](https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/datasets/_lfw.py).
+
+## AI Disclosure:
+
+Trong quá trình thực hiện dự án, nhóm có sử dụng các công cụ AI để hỗ trợ một số công việc sau:
+
+- **Codex:** Hỗ trợ lập trình và gỡ lỗi (debugging), tra cứu cú pháp thư viện, gợi ý cấu trúc lệnh và giải thích thông báo lỗi.
+- **Gemini và Perplexity:** Hỗ trợ tra cứu, tổng hợp tài liệu; tóm tắt các khái niệm kỹ thuật phức tạp; giải thích công thức toán học và tìm kiếm tài liệu tham khảo.
+- **Claude:** Hỗ trợ biên tập slide, báo cáo và xây dựng template; cải thiện cách diễn đạt, sửa lỗi chính tả/ngữ pháp và trình bày nội dung mạch lạc.
+
+### Trách nhiệm và đóng góp của nhóm
+
+Các thành viên trực tiếp kiểm tra và xác thực mã nguồn, thực hiện các phép đo trên dữ liệu thực tế, đồng thời chịu trách nhiệm hoàn toàn về tính chính xác của nội dung báo cáo. Các công cụ AI chỉ đóng vai trò hỗ trợ; kết quả đầu ra được nhóm rà soát trước khi sử dụng.
