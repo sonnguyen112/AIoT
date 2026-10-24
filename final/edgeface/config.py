@@ -25,6 +25,8 @@ class Config:
     camera_height: int = field(default_factory=lambda: int(os.getenv("CAMERA_HEIGHT", "480")))
     frame_interval: float = field(default_factory=lambda: float(os.getenv("FRAME_INTERVAL_S", "0.15")))
     ort_threads: int = field(default_factory=lambda: int(os.getenv("ORT_THREADS", "2")))
+    rejection_threshold: float | None = field(default_factory=lambda: (
+        float(os.environ["REJECTION_THRESHOLD"]) if os.getenv("REJECTION_THRESHOLD", "").strip() else None))
     collection_target: int = field(default_factory=lambda: int(os.getenv("COLLECTION_TARGET", "150")))
     collection_interval: float = field(default_factory=lambda: float(os.getenv("COLLECTION_INTERVAL_S", "0.5")))
     collection_max_seconds: int = field(default_factory=lambda: int(os.getenv("COLLECTION_MAX_SECONDS", "600")))
@@ -58,6 +60,8 @@ class Config:
             raise ValueError("MQTT_PASSWORD is required (anonymous MQTT is disabled)")
         if cfg.ort_threads < 1 or cfg.frame_interval <= 0 or cfg.collection_interval <= 0:
             raise ValueError("Threads and sampling intervals must be positive")
+        if cfg.rejection_threshold is not None and not 0 <= cfg.rejection_threshold <= 1:
+            raise ValueError("REJECTION_THRESHOLD must be between 0 and 1, or empty for validation calibration")
         if cfg.collection_target < 1 or cfg.collection_target > 1000:
             raise ValueError("COLLECTION_TARGET must be between 1 and 1000")
         if cfg.camera_backend not in {"auto", "usb", "csi"}:

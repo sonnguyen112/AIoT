@@ -145,6 +145,8 @@ Baseline là pretrained ImageNet backbone + head được train, backbone đóng
 
 ## Deploy model và service
 
+Pi hỗ trợ `REJECTION_THRESHOLD` trong `.env` để đặt ngưỡng vận hành thủ công; cấu hình demo hiện dùng `0.9`. Confidence dưới 90% trả về Unknown, còn lớp Unknown luôn bị từ chối. Để trống biến này sẽ dùng ngưỡng đã chọn từ validation trong bundle. Khởi động lại dịch vụ `edgeface` sau khi đổi cấu hình. Ngưỡng vận hành không sửa `threshold.json` hay các số liệu đánh giá cũ; MQTT status có `rejection_threshold` và `rejection_threshold_source` để theo dõi.
+
 ```bash
 python -m scripts.deploy_model --host pi@<PI_IP>
 ssh pi@<PI_IP> 'cd /home/pi/edgeface && bash scripts/install_service.sh'
@@ -161,6 +163,8 @@ Broker/bot/Tailscale trên laptop phải hoạt động. Secrets Pi chỉ gồm 
 
 ## Telegram demo
 
+Gửi `/help` một lần để hiện nút **📷 Bắt đầu nhận diện** ở bàn phím Telegram. Bấm nút thay cho gõ `/start`; nút dùng cùng luồng MQTT, nhận kết quả và tự dừng. Bàn phím tiếp tục hiển thị để bắt đầu phiên tiếp theo; `/start` vẫn được hỗ trợ.
+
 | Lệnh | Hành vi |
 |---|---|
 | `/start` | Pi mở camera, phát hiện/crop mặt và ONNX CPU inference |
@@ -171,11 +175,11 @@ Broker/bot/Tailscale trên laptop phải hoạt động. Secrets Pi chỉ gồm 
 | `/collect <name>` | Chức năng bổ sung: xác nhận consent rồi thu crop camera |
 | `/collect_unknown <anonymous-id>` | Mỗi participant Unknown có ID ẩn danh riêng để split theo danh tính |
 
-`/start` phản hồi **“Đang nhận diện...”**. Đứng một mình trước camera; khi nhận diện thành viên, bot gửi tên đầy đủ và confidence/latency thật, tự gửi stop và chỉ báo camera đã dừng sau khi Pi xác nhận. **Unknown không gửi tin nhắn Telegram và vẫn tiếp tục nhận diện**; metadata Unknown vẫn có trong MQTT để quan sát/đánh giá. Lệnh tự stop gắn request ID phiên để không dừng nhầm phiên mới. Cooldown mặc định 30 giây mỗi nhãn MQTT trong phiên; `/start` mới reset cooldown để có phản hồi ngay. Nhiều mặt không tự gán nhãn; không có mặt sẽ thông báo sau thời gian cấu hình. Âm thanh tắt.
+`/start` phản hồi **“Đang nhận diện...”**. Đứng một mình trước camera; khi nhận diện thành viên, bot gửi tên hiển thị và confidence/latency thật, tự gửi stop và chỉ báo camera đã dừng sau khi Pi xác nhận. **Unknown không gửi tin nhắn Telegram và vẫn tiếp tục nhận diện**; metadata Unknown vẫn có trong MQTT để quan sát/đánh giá. Lệnh tự stop gắn request ID phiên để không dừng nhầm phiên mới. Cooldown mặc định 30 giây mỗi nhãn MQTT trong phiên; `/start` mới reset cooldown để có phản hồi ngay. Nhiều mặt không tự gán nhãn; không có mặt sẽ thông báo sau thời gian cấu hình. Âm thanh tắt.
 
-Tính năng ảnh đã bật cho demo: **tin nhắn kết quả và ảnh được gửi thành hai tin riêng**, về chat đã `/start`. Ảnh đúng frame nhận diện có bbox, tên đầy đủ và confidence; Pi giữ RAM tạm 120 giây, HTTP chỉ bind Tailscale và yêu cầu token. Nếu ảnh lỗi, kết quả chữ và auto-stop vẫn hoạt động. Bật/tắt bằng `RECOGNITION_PHOTO_ENABLED` trên cả Pi/bot; provision secret bằng `scripts.configure_snapshots`. [Cấu hình và luồng chi tiết](docs/PHOTO_NOTIFICATIONS.md).
+Tính năng ảnh đã bật cho demo: **tin nhắn kết quả và ảnh được gửi thành hai tin riêng**, về chat đã `/start`. Ảnh đúng frame nhận diện có bbox, tên hiển thị và confidence; Pi giữ RAM tạm 120 giây, HTTP chỉ bind Tailscale và yêu cầu token. Nếu ảnh lỗi, kết quả chữ và auto-stop vẫn hoạt động. Bật/tắt bằng `RECOGNITION_PHOTO_ENABLED` trên cả Pi/bot; provision secret bằng `scripts.configure_snapshots`. [Cấu hình và luồng chi tiết](docs/PHOTO_NOTIFICATIONS.md).
 
-Tên hiển thị cấu hình tại `configs/display_names.json`: `son` → `Nguyễn Hồ Trường Sơn`. Model/dataset dùng nhãn ổn định; Telegram dùng tên đầy đủ. Đổi mapping không cần train lại. `AUTO_STOP_ON_KNOWN=true` bật hành vi tự dừng.
+Tên hiển thị cấu hình tại `configs/display_names.json`: `son` → `Sơn`. Model/dataset dùng nhãn ổn định; Telegram dùng tên hiển thị. Đổi mapping không cần train lại. `AUTO_STOP_ON_KNOWN=true` bật hành vi tự dừng.
 
 Collection đã được chạy thực tế với 150 crop Sơn từ camera Pi: target 150 mặc định, progress qua MQTT, timeout/stop và quality filtering. Các thành viên còn lại cần bổ sung phiên camera độc lập. Đồng bộ bằng `PI_HOST=pi@<PI_IP> bash scripts/sync_dataset.sh`.
 

@@ -5,15 +5,16 @@ Run from this directory with::
     pip install torch torchvision pillow numpy gradio onnxruntime
     python demo.py
 
-The UI accepts a local ``.pth`` or ``.onnx`` weight from the checkpoints
-folder, or lets the user upload one.  It then accepts an image and displays
-the predicted class and both class probabilities.
+The UI lets the user select a local ``.pth`` or ``.onnx`` weight from the
+checkpoints folder, upload an image, and view class probabilities and model
+inference time in milliseconds (excluding model loading and preprocessing).
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import time
 from pathlib import Path
 from typing import Any
 
@@ -190,6 +191,13 @@ class InferenceEngine:
 
     def predict(self, weight_path: str | Path, image: Image.Image) -> dict[str, float]:
         """Run inference with the selected .pth or .onnx file."""
+        scores, _ = self.predict_with_timing(weight_path, image)
+        return scores
+
+    def predict_with_timing(
+        self, weight_path: str | Path, image: Image.Image
+    ) -> tuple[dict[str, float], float]:
+        """Return probabilities and model-only latency, synchronizing CUDA."""
         path = Path(weight_path)
         if not path.is_file():
             raise FileNotFoundError(f"Không tìm thấy weight: {path}")
@@ -201,20 +209,30 @@ class InferenceEngine:
             input_array = preprocess_image(image, image_size)
             input_tensor = torch.from_numpy(input_array).to(device)
             with torch.inference_mode():
-                logits = model(input_tensor).detach().cpu().numpy()
+                if device.type == "cuda":
+                    torch.cuda.synchronize(device)
+                start_ns = time.perf_counter_ns()
+                output = model(input_tensor)
+                if device.type == "cuda":
+                    torch.cuda.synchronize(device)
+                inference_time_ms = (time.perf_counter_ns() - start_ns) / 1_000_000.0
+                logits = output.detach().cpu().numpy()
         elif suffix == ".onnx":
             session, class_to_idx, image_size, input_name = self._load_onnx(path)
             input_array = preprocess_image(image, image_size)
+            start_ns = time.perf_counter_ns()
             logits = session.run(None, {input_name: input_array})[0]
+            inference_time_ms = (time.perf_counter_ns() - start_ns) / 1_000_000.0
         else:
             raise ValueError("Weight phải có đuôi .pth hoặc .onnx.")
 
         probabilities = softmax(logits)[0]
         index_to_name = names_by_index(class_to_idx)
-        return {
+        scores = {
             index_to_name.get(index, f"class_{index}"): float(probability)
             for index, probability in enumerate(probabilities)
         }
+        return scores, inference_time_ms
 
 
 def find_local_weights(weights_dir: Path) -> list[tuple[str, str]]:
@@ -243,21 +261,20 @@ def build_interface(engine: InferenceEngine, weights_dir: Path) -> Any:
     def classify(
         image: Image.Image | None,
         selected_weight: str | None,
-        uploaded_weight: str | None,
-    ) -> tuple[dict[str, float] | None, str]:
+    ) -> tuple[dict[str, float] | None, float | None, str]:
         if image is None:
-            return None, "Hãy upload một ảnh trước."
-        weight_path = uploaded_weight or selected_weight
+            return None, None, "Hãy upload một ảnh trước."
+        weight_path = selected_weight
         if not weight_path:
-            return None, "Hãy chọn hoặc upload một weight `.pth`/`.onnx`."
+            return None, None, "Hãy chọn một weight `.pth`/`.onnx` có sẵn."
         try:
-            scores = engine.predict(weight_path, image)
+            scores, inference_time_ms = engine.predict_with_timing(weight_path, image)
             predicted = max(scores, key=scores.get)
             confidence = scores[predicted] * 100.0
             status = f"Kết quả: **{predicted}** — độ tin cậy **{confidence:.2f}%**"
-            return scores, status
+            return scores, inference_time_ms, status
         except Exception as exc:  # Show a useful message inside the UI.
-            return None, f"Lỗi: `{type(exc).__name__}: {exc}`"
+            return None, None, f"Lỗi: `{type(exc).__name__}: {exc}`"
 
     with gr.Blocks(title="Dodo classifier demo") as demo:
         gr.Markdown(
@@ -272,21 +289,21 @@ def build_interface(engine: InferenceEngine, weights_dir: Path) -> Any:
                     label="Weight có sẵn",
                     info="Các file trong thư mục checkpoints.",
                 )
-                uploaded_weight = gr.File(
-                    label="Hoặc upload weight mới (.pth/.onnx)",
-                    file_types=[".pth", ".onnx"],
-                    type="filepath",
-                )
                 image = gr.Image(type="pil", label="Upload ảnh cần phân loại")
                 classify_button = gr.Button("Phân loại", variant="primary")
             with gr.Column():
                 result = gr.Label(label="Xác suất", num_top_classes=2)
+                inference_time = gr.Number(
+                    label="Thời gian suy luận (ms)",
+                    precision=2,
+                    interactive=False,
+                )
                 status = gr.Markdown("Chưa có kết quả.")
 
         classify_button.click(
             fn=classify,
-            inputs=[image, selected_weight, uploaded_weight],
-            outputs=[result, status],
+            inputs=[image, selected_weight],
+            outputs=[result, inference_time, status],
         )
     return demo
 

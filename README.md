@@ -152,7 +152,7 @@ Script kiểm tra graph bằng ONNX checker và so sánh output ONNX Runtime v�
 
 ## Chạy giao diện demo
 
-Giao diện Gradio cho phép chọn checkpoint có sẵn hoặc upload file `.pth` / `.onnx`:
+Giao diện Gradio cho phép chọn checkpoint `.pth` / `.onnx` có sẵn trong thư mục weight và upload ảnh để phân loại. Kết quả hiển thị xác suất từng lớp và thời gian suy luận bằng mili giây, không bao gồm thời gian tải mô hình và tiền xử lý ảnh.
 
 ```bash
 python midterm/demo.py --device cpu

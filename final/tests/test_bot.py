@@ -5,7 +5,7 @@ from dataclasses import replace
 from types import SimpleNamespace
 
 from edgeface.config import Config
-from telegram_bot.bot import Bot
+from telegram_bot.bot import Bot, CONTROL_KEYBOARD, START_BUTTON
 
 
 def bot(monkeypatch, tmp_path):
@@ -74,7 +74,53 @@ def test_start_shows_recognizing_status(monkeypatch, tmp_path):
     b.dispatch = AsyncMock(return_value={"ok": True, "state": "recognizing"})
     message = type("Message", (), {"reply_text": AsyncMock()})()
     asyncio.run(b.execute(message, {"action": "start"}))
-    message.reply_text.assert_awaited_once_with("Đang nhận diện...")
+    message.reply_text.assert_awaited_once_with("Đang nhận diện...", reply_markup=CONTROL_KEYBOARD)
+
+
+def test_start_button_sends_mqtt_start_and_routes_result_to_pressing_chat(monkeypatch, tmp_path):
+    b = bot(monkeypatch, tmp_path)
+    b.dispatch = AsyncMock(return_value={"ok": True, "state": "recognizing"})
+    message = SimpleNamespace(text=START_BUTTON, chat_id=123, reply_text=AsyncMock())
+    update = SimpleNamespace(effective_message=message,
+        effective_user=SimpleNamespace(id=42), effective_chat=SimpleNamespace(id=123))
+    asyncio.run(b.command(update, SimpleNamespace(args=[])))
+    command = b.dispatch.call_args.args[0]
+    assert command["action"] == "start" and command["device_id"] == b.cfg.device_id
+    assert b.recognition_chats[command["request_id"]] == 123
+    assert 123 in b.subscribers
+    message.reply_text.assert_awaited_once_with("Đang nhận diện...", reply_markup=CONTROL_KEYBOARD)
+
+
+def test_start_button_respects_telegram_allowlist(monkeypatch, tmp_path):
+    b = bot(monkeypatch, tmp_path)
+    b.users = {999}
+    b.dispatch = AsyncMock()
+    message = SimpleNamespace(text=START_BUTTON, chat_id=123, reply_text=AsyncMock())
+    update = SimpleNamespace(effective_message=message,
+        effective_user=SimpleNamespace(id=42), effective_chat=SimpleNamespace(id=123))
+    asyncio.run(b.command(update, SimpleNamespace(args=[])))
+    b.dispatch.assert_not_called()
+    message.reply_text.assert_not_called()
+
+
+def test_help_shows_button_without_starting_camera(monkeypatch, tmp_path):
+    b = bot(monkeypatch, tmp_path)
+    b.dispatch = AsyncMock()
+    message = SimpleNamespace(text="/help", chat_id=123, reply_text=AsyncMock())
+    update = SimpleNamespace(effective_message=message,
+        effective_user=SimpleNamespace(id=42), effective_chat=SimpleNamespace(id=123))
+    asyncio.run(b.command(update, SimpleNamespace(args=[])))
+    b.dispatch.assert_not_called()
+    assert message.reply_text.call_args.kwargs["reply_markup"] == CONTROL_KEYBOARD
+
+
+def test_mqtt_failure_keeps_button_for_retry(monkeypatch, tmp_path):
+    b = bot(monkeypatch, tmp_path)
+    b.dispatch = AsyncMock(side_effect=RuntimeError("MQTT unavailable; command not sent"))
+    message = SimpleNamespace(chat_id=123, reply_text=AsyncMock())
+    asyncio.run(b.execute(message, {"action": "start", "request_id": "session"}))
+    assert "MQTT unavailable" in message.reply_text.call_args.args[0]
+    assert message.reply_text.call_args.kwargs["reply_markup"] == CONTROL_KEYBOARD
 
 
 def test_known_sends_separate_text_and_photo_only_to_starting_chat(monkeypatch, tmp_path):

@@ -1,0 +1,26 @@
+Generator: built-in image_gen
+
+Use case: infographic-diagram.
+Asset type: a finished PNG infographic to insert into a Vietnamese university presentation slide about the PyTorch to ONNX conversion pipeline in convert_to_onnx.py.
+Create ONE beautifully clear, high-resolution landscape 16:9 slide infographic, ideally 3840x2160. White background, dark navy text, elegant flat technical diagram, generous white space, large readable sans-serif typography, subtle blue and teal accents, orange accent on the PyTorch source, small minimalist line icons. Absolutely no photography, 3D, watermarks, fake logos, busy decorations, LaTeX or equation formatting. Correct Vietnamese accents and exact readable text.
+Title at top left, verbatim: "QUY TRÌNH CHUYỂN PYTORCH SANG ONNX"
+Subtitle: "ResNet50 • convert_to_onnx.py"
+Main diagram: FIVE evenly spaced rounded cards in a single horizontal left-to-right flow with clear arrows. Number each card 01,02,03,04,05. All text fully contained, not too dense, generous margins. Text in cards exactly:
+01 heading "Tải checkpoint"
+lines "best_resnet50.pth" and "torch.load()" and "Lấy model_state_dict"
+02 heading "Khôi phục model"
+lines "Dựng ResNet50" and "load_state_dict()" and "model.eval()"
+03 heading "Export ONNX"
+lines "torch.onnx.export()" and "Input giả: [1, 3, 224, 224]" and "Opset 17 • Batch động"
+04 heading "Tối ưu graph"
+lines "ONNX Runtime • CPU" and "basic / extend / all" and "Lưu graph đã tối ưu"
+05 heading "Kiểm tra kết quả"
+lines "onnx.checker" and "Thêm metadata" and "So sánh logits với PyTorch"
+From card05 draw an arrow down to a wide compact output panel aligned under right half of diagram with heading "MODEL SẴN SÀNG SUY LUẬN" and filenames on separate lines:
+"dodo_classifier_basic.onnx"
+"dodo_classifier_extend.onnx"
+"dodo_classifier.onnx"
+Below the main row, in the left half, add a tasteful small annotation strip with text "Constant folding: tính trước biểu thức hằng" and "Sai lệch tối đa cho phép: 0.0001".
+The output panel represents choosing optimization level and exporting the corresponding model, NOT automatically generating 3 files in one run. Small footer text: "Chọn một mức tối ưu cho mỗi lần chạy".
+Ensure conceptual accuracy: checkpoint contains model weights, restore model in eval, use a dummy tensor to export, ONNX Runtime optimizes a temporary raw ONNX on CPU, then checker/metadata/numerical validation checks saved output. Do not imply that real image preprocessing or training happens in this diagram. Keep every text label large enough for a projector.
+

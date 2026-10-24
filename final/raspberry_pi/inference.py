@@ -17,7 +17,7 @@ class ModelError(RuntimeError):
 
 
 class Classifier:
-    def __init__(self, directory: Path, threads: int = 2):
+    def __init__(self, directory: Path, threads: int = 2, *, threshold_override: float | None = None):
         try:
             self.classes = json.loads((directory / "classes.json").read_text())
             self.preprocessing = json.loads((directory / "preprocessing.json").read_text())
@@ -25,6 +25,13 @@ class Classifier:
             self.threshold = float(calibration["threshold"])
             if not 0 <= self.threshold <= 1 or calibration.get("source") != "validation":
                 raise ValueError("Threshold must be calibrated on validation data")
+            self.calibrated_threshold = self.threshold
+            self.threshold_source = "validation"
+            if threshold_override is not None:
+                self.threshold = float(threshold_override)
+                if not 0 <= self.threshold <= 1:
+                    raise ValueError("Threshold override must be between 0 and 1")
+                self.threshold_source = "manual_override"
             if not isinstance(self.classes, list) or "Unknown" not in self.classes or len(set(self.classes)) != len(self.classes):
                 raise ValueError("Classes must be unique and include Unknown")
             if self.preprocessing != PREPROCESS:

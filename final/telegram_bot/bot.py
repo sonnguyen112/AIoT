@@ -9,9 +9,9 @@ from collections import OrderedDict
 from pathlib import Path
 from typing import Any
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, Update
 from telegram.error import TelegramError
-from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes
+from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes, MessageHandler, filters
 
 from edgeface.config import Config
 from edgeface.mqtt import MQTTLink
@@ -21,7 +21,13 @@ from edgeface.protocol import decode, make_command, safe_name
 from edgeface.snapshot import fetch_snapshot
 
 log = logging.getLogger(__name__)
-HELP = ("EdgeFace commands:\n/start — enable local Pi recognition\n/stop — release camera\n"
+START_BUTTON = "📷 Bắt đầu nhận diện"
+CONTROL_KEYBOARD = ReplyKeyboardMarkup(
+    [[START_BUTTON]], resize_keyboard=True, is_persistent=True,
+    input_field_placeholder="Bấm nút để bắt đầu nhận diện",
+)
+HELP = ("Bấm nút 📷 Bắt đầu nhận diện để mở camera và nhận diện trên Pi.\n\n"
+        "EdgeFace commands:\n/start — enable local Pi recognition\n/stop — release camera\n"
         "/status — device health\n/members — registered members\n"
         "/collect <name> — collect after consent confirmation\n"
         "/collect_unknown <anonymous-id> — one consenting unknown participant per session\n"
@@ -226,12 +232,12 @@ class Bot:
         message = update.effective_message
         if not message:
             return
-        action = message.text.split()[0].split("@")[0][1:]
+        action = "start" if message.text == START_BUTTON else message.text.split()[0].split("@")[0][1:]
         if action in {"start", "collect", "collect_unknown"}:
             self.subscribers.add(update.effective_chat.id)
             save_json(Path("reports/generated/bot_subscribers.json"), sorted(self.subscribers))
         if action == "help":
-            await message.reply_text(HELP)
+            await message.reply_text(HELP, reply_markup=CONTROL_KEYBOARD)
             return
         args: dict[str, Any] = {}
         if action in {"collect", "collect_unknown"}:
@@ -279,7 +285,7 @@ class Bot:
             if not response.get("ok"):
                 self.recognition_chats.pop(command["request_id"], None)
                 reason = response.get("command_error") or (response.get("error") or {}).get("message", "Unknown device error")
-                await message.reply_text(f"Pi refused command: {reason}")
+                await message.reply_text(f"Pi refused command: {reason}", reply_markup=CONTROL_KEYBOARD)
                 return
             action = command["action"]
             if action == "start":
@@ -302,9 +308,9 @@ class Bot:
                         f"Error: {response.get('error') or 'none'}")
             else:
                 text = f"Device {response['device_id']}: {response['state']}"
-            await message.reply_text(text)
+            await message.reply_text(text, reply_markup=CONTROL_KEYBOARD)
         except RuntimeError as exc:
-            await message.reply_text(str(exc))
+            await message.reply_text(str(exc), reply_markup=CONTROL_KEYBOARD)
 
 
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -324,6 +330,7 @@ def main() -> None:
     app = Application.builder().token(token).post_init(bot.init).post_stop(bot.close).build()
     for action in ("start", "stop", "collect", "collect_unknown", "status", "members", "help"):
         app.add_handler(CommandHandler(action, bot.command))
+    app.add_handler(MessageHandler(filters.Text([START_BUTTON]), bot.command))
     app.add_handler(CallbackQueryHandler(bot.consent_callback, pattern="^consent:"))
     app.add_error_handler(error_handler)
     app.run_polling(drop_pending_updates=True)

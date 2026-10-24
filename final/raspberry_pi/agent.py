@@ -75,7 +75,8 @@ class Agent:
         return self.envelope(online=True, state=self.state, camera=self.camera.backend,
                              model_version=self.classifier.version if self.classifier else None,
                              model_bundle_version=self.classifier.bundle_version if self.classifier else None,
-                             rejection_threshold=self.classifier.threshold if self.classifier else None,
+                             rejection_threshold=self.classifier.threshold if self.classifier else self.cfg.rejection_threshold,
+                             rejection_threshold_source=("manual_override" if self.cfg.rejection_threshold is not None else "validation"),
                              inference_ms=self.inference_ms, detection_ms=self.detection_ms,
                              end_to_end_ms=self.e2e_ms, cpu_percent=psutil.cpu_percent(),
                              cpu_temperature_c=temperature(), ram_mb=self.process.memory_info().rss / 1024**2,
@@ -140,7 +141,8 @@ class Agent:
                 if self.detector is None:
                     self.detector = FaceDetector(str(self.cfg.detector_path))
                 if action == "start":
-                    self.classifier = Classifier(self.cfg.model_dir, self.cfg.ort_threads)
+                    self.classifier = Classifier(self.cfg.model_dir, self.cfg.ort_threads,
+                                                 threshold_override=self.cfg.rejection_threshold)
                 self.camera.open()
                 self.active_request = request_id
                 self.last_face = time.monotonic()
